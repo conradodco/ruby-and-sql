@@ -17,9 +17,50 @@ Activity.destroy_all
 # 1. insert 3 rows in the activities table with relationships to
 # a single salesperson and 2 different contacts
 
+# Creating second contact
+
+apple = Company.find_by({"name" => "Apple"})
+new_contact = Contact.new
+new_contact["first_name"] = "Steve"
+new_contact["last_name"] = "Jobs"
+new_contact["email"] = "Steve@apple.com"
+new_contact["company_id"] = apple["id"]
+new_contact.save
+
+# Creating id finders
+
+john = Salesperson.find_by({"first_name" => "Johnny"})
+contact_1 = Contact.find_by({"first_name" => "Tim"})
+contact_2 = Contact.find_by({"first_name" => "Steve"})
+
+# Insert rows
+new_activity = Activity.new
+new_activity["salesperson_id"] = john["id"]
+new_activity["contact_id"] = contact_1["id"]
+new_activity["note"] = "Sent an email to Tim from Apple."
+new_activity.save
+
+new_activity = Activity.new
+new_activity["salesperson_id"] = john["id"]
+new_activity["contact_id"] = contact_1["id"]
+new_activity["note"] = "Booked a call with Tim from Apple."
+new_activity.save
+
+new_activity = Activity.new
+new_activity["salesperson_id"] = john["id"]
+new_activity["contact_id"] = contact_2["id"]
+new_activity["note"] = "Asked Steve from Apple for a new iphone."
+new_activity.save
+
 # 2. Display all the activities between the salesperson used above
 # and one of the contacts (sample output below):
 
+activities = Activity.where({"salesperson_id" => john["id"]})
+
+puts "Activities done by John:"
+for activity in activities
+    puts "- #{activity["note"]}"
+end
 # ---------------------------------
 # Activities between Ben and Tim Cook:
 # - quick checkin over facetime

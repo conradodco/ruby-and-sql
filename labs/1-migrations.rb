@@ -27,3 +27,4 @@
 # rails db:migrate
 
 # 5. check the schema to confirm the change
+
